@@ -27,4 +27,25 @@ class PetServiceTest {
         assertTrue(result.isPresent());
         assertEquals("Doggie", result.get().getName());
     }
+
+    @Test
+    void testAddOrUpdatePet() {
+        Pet pet = new Pet();
+        pet.setId(1L);
+        pet.setName("Doggie");
+
+        when(repository.save(pet)).thenReturn(pet);
+
+        Pet result = service.addOrUpdatePet(pet);
+        assertNotNull(result);
+        assertEquals("Doggie", result.getName());
+    }
+
+    @Test
+    void testDeletePet() {
+        doNothing().when(repository).deleteById(1L);
+
+        service.deletePet(1L);
+        verify(repository, times(1)).deleteById(1L);
+    }
 }
